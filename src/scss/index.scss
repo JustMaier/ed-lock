@@ -1,0 +1,12 @@
+body{
+    // background:green;
+}
+.hidden{
+    display: none;
+}
+[data-section]{
+    display: none;
+    &.active{
+        display: block;
+    }
+}
