@@ -4,6 +4,7 @@ export default class EthereumClient {
     constructor({rpcUrl, contractAbiString, contractAddress} = {}){
         console.log('Connect ETH via', rpcUrl);
         this.web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
+        console
         const contractFactoryAbi = JSON.parse(contractAbiString);
         this.contractFactory = new this.web3.eth.Contract(contractFactoryAbi, contractAddress);
     }

@@ -166,10 +166,9 @@ class EdLock {
     }
 
     async fundIt() {
-        this.ethereumClient.fund(this.state.contractAddress, this.state.config.payout, this.state.arweaveId, () => {
-            document.querySelector('#fund').classList.add('hidden');
-            document.querySelector('#paid').classList.remove('hidden');
-        });
+        document.querySelector('#fund').classList.add('hidden');
+        const result = await this.ethereumClient.fund(this.state.contractAddress, this.state.config.payout, this.state.arweaveId);
+        document.querySelector('#paid').classList.remove('hidden');
     }
 }
 new EdLock();

@@ -2,4 +2,4 @@
 
 Securely time-lock documents on Arweave with Ethereum incentives
 
-[Current Status Video](https://www.loom.com/share/2007a3aa84164fdf8245333e2fe6a504)
+[Current Status Video](https://www.loom.com/share/ba78de41f3f84060934c81556fdcf319)
