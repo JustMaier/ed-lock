@@ -12,7 +12,7 @@ class EdLock {
             file: null,
             config: {
                 unlockTime: new Date(new Date().toJSON().split('T')[0]),
-                payout: 1,
+                payout: .01,
                 shards: 10,
                 threshold: 7
             },
@@ -24,8 +24,7 @@ class EdLock {
         
         this.ethereumClient = new EthereumClient({
             rpcUrl: process.env.RPC_URL,
-            contractAbiString: process.env.CONTRACT_ABI, // TODO - add the contract ABI
-            contractAddress: process.env.CONTRACT_ADDRESS // TODO - add the contract address
+            contractAddress: process.env.CONTRACT_ADDRESS
         });
 
         document.querySelector('[data-section="input"]').addEventListener('submit', this.loadConfig.bind(this), false);
@@ -130,20 +129,20 @@ class EdLock {
                 acct
             };
         });
-        this.setState({results: await generateQRCodes(burnerCombos.map(x=>x.shard+':'+x.acct.privateKey))});
 
         // Deploy Smart Contract with Params
         this.loading('Deploying contract')
         this.state.contractAddrs = await this.ethereumClient.deploy({
-            ... this.state.config,
+            unlockTime: this.state.config.unlockTime,
             honeypotAddr: honeypotAcct.address,
             payoutAddrs: burnerCombos.map(x=>x.acct.address)
         });
+        console.log('Deployed', this.state.contractAddrs);
 
-        this.buryIt(masterAcct, honeypotAcct);
+        this.buryIt(masterAcct, honeypotAcct, burnerCombos);
     }
 
-    async buryIt(masterAcct, honeypotAcct){
+    async buryIt(masterAcct, honeypotAcct, burnerCombos){
         // Generate combination of key+file
         this.loading('Packing lockbox')
         const textEncoder = new TextEncoder();
@@ -158,8 +157,13 @@ class EdLock {
         // 11. Sign the encrypted file as tx
         // 12. Dispatch Arweave tx
         this.loading('Burying in Arweave')
-        const [transaction, response] = await this.arweaveClient.postFile(lockboxBuffer, masterAcct.privateKey);
+        const transaction = await this.arweaveClient.postFile(lockboxBuffer, masterAcct.privateKey);
         this.state.arweaveId = transaction.id;
+
+        // Generate QR Codes
+        this.setState({results: await generateQRCodes(burnerCombos.map(x=>
+            [x.shard, x.acct.privateKey, this.state.contractAddrs, this.state.arweaveId].join(':')
+        ))});
         
         // Done
         this.loading(null)
@@ -167,7 +171,9 @@ class EdLock {
 
     async fundIt() {
         document.querySelector('#fund').classList.add('hidden');
-        const result = await this.ethereumClient.fund(this.state.contractAddress, this.state.config.payout, this.state.arweaveId);
+        this.loading('Send reward to contract');
+        await this.ethereumClient.fund(this.state.contractAddrs, this.state.config.payout);
+        this.loading(null);
         document.querySelector('#paid').classList.remove('hidden');
     }
 }

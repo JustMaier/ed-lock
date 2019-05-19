@@ -19,6 +19,7 @@ export async function generateQRCodes(codes){
                 width: 185,
                 height: 185,
                 color: '#000',
+                ecl: 'L',
                 background: 'transparent'
             }).svg();
             return div;

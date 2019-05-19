@@ -1,30 +1,42 @@
-pragma solidity ^0.5.1;
+pragma solidity ^0.5.0;
+
+contract LockFactory {
+   Lock[] locks;
+   
+   function createChildContract(uint unlockTime, address payable honeypot, address payable[] memory payoutAddrs) public returns (Lock){
+      Lock newLock = new Lock(unlockTime, honeypot, payoutAddrs);            
+      locks.push(newLock);
+      return newLock;
+   }
+   function getDeployedChildContracts() public view returns (Lock[] memory) {
+      return locks;
+   }
+}
 
 contract Lock {
-    address payable honeypot;
     uint unlockTime;
-    uint payoutQty;
-    uint payoutQtySteal;
     address payable[] payoutAddrs;
-    bool paidOut = false;
+    address payable honeypot;
+    uint pot;
+
+    constructor 
+        (uint _unlockTime, address payable _honeypot, address payable[] memory _payoutAddrs) public {
+        unlockTime = _unlockTime;
+        payoutAddrs =_payoutAddrs;
+        honeypot = _honeypot;
+    }
 
     function () external payable {
-        address from = msg.sender;
-        if(from != honeypot && !paidOut) {
-            return;
-        }
-
-        paidOut = true;
-
-        if(now >= unlockTime) {
-            // Send 100% to addresses
-            for(uint i = 0; i < payoutAddrs.length; i++){
-                address payable a = payoutAddrs[i];
-                a.transfer(1);
-            }
-        }
-        else {
-            honeypot.transfer(payoutQtySteal);
+        pot += msg.value;
+    }
+    
+    function unlock() public payable {
+        require(now>unlockTime);
+        uint i;
+        uint share = (pot / payoutAddrs.length);
+        for(i = 0; i<payoutAddrs.length; i++) {
+            address payable recipient = payoutAddrs[i];
+            recipient.transfer(share);
         }
     }
 

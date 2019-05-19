@@ -33,22 +33,25 @@ export default class ArweaveClient extends EventEmitter {
         // 10. **Encrypt** the Combined File
         const encryptedBuffer = await this.arweave.crypto.encrypt(buffer, key);
         
-        // 11. Sign the encrypted file as tx
-        console.log(encryptedBuffer);
-        const transaction = await this.arweave.createTransaction({
-            data: encryptedBuffer
-        }, this.wallet);
-        transaction.addTag('App-Name', 'ed-lock');
-        transaction.addTag('App-Version', '0.1.0');
-        transaction.addTag('Unix-Time', new Date().getTime());
-        await this.arweave.transactions.sign(transaction, this.wallet);
-
         // 12. Dispatch Arweave tx
-        const response = await this.arweave.transactions.post(transaction);
+        let transaction = null;
+        let successfulUpload = false;
+        while(!successfulUpload){
+            // 11. Sign the encrypted file as tx
+            transaction = await this.arweave.createTransaction({
+                data: encryptedBuffer
+            }, this.wallet);
+            transaction.addTag('App-Name', 'ed-lock');
+            transaction.addTag('App-Version', '0.1.0');
+            transaction.addTag('Unix-Time', new Date().getTime());
+            await this.arweave.transactions.sign(transaction, this.wallet);
+            
+            console.log('Sending Arweave transaction');
+            const response = await this.arweave.transactions.post(transaction);
+            console.log('Arweave response', response);
+            successfulUpload = response.status === 200;
+        }
 
-        // Need to do this to get the Arweave hash...
-        // const status = await this.arweave.transactions.get(transaction.id);
-
-        return [transaction, response];
+        return transaction;
     }
 }
