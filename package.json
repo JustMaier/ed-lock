@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "watch": "parcel public/index.html",
-    "build": "parcel build public/index.html"
+    "build": "parcel build public/index.html",
+    "clean": "rimraf dist",
+    "upload": "arweave deploy dist/index.html --package --key-file arweave-key.json --tag App-Name:ed-lock",
+    "deploy": "npm run clean && npm run build && npm run upload"
   },
   "browserslist": [
     "last 1 chrome versions"
@@ -18,12 +21,13 @@
     "lite-ee": "^1.0.1",
     "qrcode-svg": "^1.0.0",
     "secrets.js-grempe": "^1.1.0",
-    "ssss-js": "^1.1.0",
     "web3": "^1.0.0-beta.55"
   },
   "devDependencies": {
+    "arweave-deploy": "^1.3.0",
     "parcel-bundler": "^1.12.3",
     "posthtml-expressions": "^1.1.1",
+    "rimraf": "^2.6.3",
     "sass": "^1.20.1"
   }
 }

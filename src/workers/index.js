@@ -1,28 +1,27 @@
+import secrets from 'secrets.js-grempe';
+import QRCode from 'qrcode-svg';
+
 export async function generateShards(shards, threshold, secret){
     return new Promise((resolve) => {
-        const w = new Worker('./sharding.js');
-        w.postMessage({shards, threshold, secret});
-        w.onmessage = ({data}) => {
-            w.terminate();
-            resolve(data);
-        }
+        const shardStrings = secrets.share(secrets.str2hex(secret), shards, threshold);
+        resolve(shardStrings)
     });
 }
 
 export async function generateQRCodes(codes){
     return new Promise((resolve) => {
-        const w = new Worker('./qr.js');
-        w.postMessage({codes});
-        w.onmessage = ({data}) => {
-            data = data.map(x => {
-                const div = document.createElement('div');
-                div.classList.add('svg');
-                div.innerHTML = x;
-                return div;
-            });
-            
-            w.terminate();
-            resolve(data);
-        };
+        resolve(codes.map(code => {
+            const div = document.createElement('div');
+            div.classList.add('svg');
+            div.innerHTML = new QRCode({
+                content: code,
+                padding: 0,
+                width: 185,
+                height: 185,
+                color: '#000',
+                background: 'transparent'
+            }).svg();
+            return div;
+        }));
     });
 }
