@@ -1,12 +1,12 @@
-body{
-    // background:green;
-}
-.hidden{
-    display: none;
-}
-[data-section]{
-    display: none;
-    &.active{
-        display: block;
-    }
-}
+@import '_variables.scss';
+@import '_reset.scss';
+@import '_util.scss';
+@import '_type.scss';
+@import '_base.scss';
+@import '_nav.scss';
+@import '_form.scss';
+@import '_button.scss';
+@import '_loading.scss';
+@import '_error.scss';
+@import '_results.scss';
+@import '_print.scss';

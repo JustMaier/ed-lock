@@ -1,0 +1,30 @@
+@media print {
+    body {
+        background: none;
+    }
+    
+    main {
+        max-width: none;
+    }
+    
+    .btn {
+        display: none;
+    }
+    
+    nav{
+        display: none;
+    }
+    
+    .results {
+        .results-codes{
+            box-shadow: none !important;
+            border-radius: 0;
+            display: block;
+        }
+        .svg{
+            width:180px;
+            height:180px;
+            margin:20px;
+        }
+    }
+}

@@ -1,0 +1,21 @@
+// Type
+// -----------------------
+body {
+    font-family: $font;
+    font-size: 18px;
+}
+a {
+    color: $accent;
+}
+
+// Character Classes
+// -----------------------
+.text-center{
+    text-align: center;
+}
+.small {
+    font-size: .75em;
+}
+.accent {
+    color: $accent;
+}

@@ -1,0 +1,10 @@
+.error{
+    &:before{
+        content:'\d7';
+        font-size:6em;
+        color: $danger;
+        text-shadow: 0px 10px 5px rgba(#000, .3);
+
+    }
+    text-align: center;
+}

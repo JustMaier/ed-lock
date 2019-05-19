@@ -17,11 +17,13 @@
     "arweave": "^1.3.1",
     "lite-ee": "^1.0.1",
     "qrcode-svg": "^1.0.0",
+    "secrets.js-grempe": "^1.1.0",
     "ssss-js": "^1.1.0",
     "web3": "^1.0.0-beta.55"
   },
   "devDependencies": {
     "parcel-bundler": "^1.12.3",
+    "posthtml-expressions": "^1.1.1",
     "sass": "^1.20.1"
   }
 }

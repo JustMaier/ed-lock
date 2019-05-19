@@ -1,0 +1,19 @@
+nav {
+    $nav-width: $container/2;
+    background-color: $accent;
+    width: $nav-width;
+    line-height: $nav-height;
+    height: $nav-height;
+    font-size: 2em;
+    left:50%;
+    margin-left: ($nav-width/-2);
+    text-align: center;
+    position: fixed;
+    border-radius: 0 0 5px 5px;
+    box-shadow: 0px 5px 10px rgba(#000, .5);
+    font-family: $font-heading;
+
+    & ~ main{
+        padding-top: ($nav-height + $spacer);
+    }
+}

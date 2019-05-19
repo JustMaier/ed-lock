@@ -1,0 +1,20 @@
+body {
+    color: $fg;
+    background-color: $bg;
+    background-image: radial-gradient(circle farthest-side, lighten($bg, 2%), $bg);
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    min-height:100vh;
+}
+
+main {
+    max-width: $container;
+    margin:0 auto;
+}
+
+[data-section]{
+    display: none;
+    &.active{
+        display: block;
+    }
+}

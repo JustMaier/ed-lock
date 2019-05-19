@@ -1,0 +1,31 @@
+.results {
+    $gutter: $spacer * .5;
+
+    .results-codes{
+        background:rgba(#fff, .8);
+        margin: ($spacer * .5) 0;
+        border-radius: 5px;
+        box-shadow: 0px 5px 10px rgba(#000, .5);
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .svg {
+        display:inline-block;
+        margin: ($gutter/2);
+    }
+
+    .paid {
+        text-align: center;
+        margin-bottom:30px;
+        &:before{
+            content:'✔';
+            display: block;
+            font-size:4em;
+            color:$success;
+            text-shadow: 0px 10px 5px rgba(#000, .3);
+            margin-bottom: 5px;
+        }
+    }
+}

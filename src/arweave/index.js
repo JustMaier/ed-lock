@@ -38,10 +38,16 @@ export default class ArweaveClient extends EventEmitter {
         const transaction = await this.arweave.createTransaction({
             data: encryptedBuffer
         }, this.wallet);
+        transaction.addTag('App-Name', 'ed-lock');
+        transaction.addTag('App-Version', '0.1.0');
+        transaction.addTag('Unix-Time', new Date().getTime());
         await this.arweave.transactions.sign(transaction, this.wallet);
 
         // 12. Dispatch Arweave tx
         const response = await this.arweave.transactions.post(transaction);
+
+        // Need to do this to get the Arweave hash...
+        // const status = await this.arweave.transactions.get(transaction.id);
 
         return [transaction, response];
     }
